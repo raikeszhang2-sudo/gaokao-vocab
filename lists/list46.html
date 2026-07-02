@@ -1,1 +1,22 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>List 46 单词朗读</title><link rel="stylesheet" href="../style.css"></head><body><header><h1>高考词汇 List 46</h1><p>共 60 个词。点击单词即可播放发音。</p><p><a class="badge" href="../index.html">← 返回总目录</a></p></header><main class="container"><section class="controls"><button onclick="prev()">上一个</button><button onclick="playCurrent()">播放当前</button><button onclick="next()">下一个</button><button onclick="randomPlay()">随机播放</button><button onclick="startAuto()">自动连播</button><button class="secondary" onclick="stopAuto()">停止</button><button class="ghost" onclick="toggleHide()">隐藏/显示单词</button><label>语速 <select id="rate"><option value="0.75">慢速</option><option value="0.9" selected>正常</option><option value="1.05">稍快</option></select></label><label>间隔 <select id="gap"><option value="1800">1.8秒</option><option value="2500" selected>2.5秒</option><option value="3500">3.5秒</option></select></label></section><section id="words" class="wordgrid"></section><p class="footer">提示：首次使用时，手机浏览器可能需要点一次播放按钮后才允许发声。</p></main><script>window.WORDS=["bone", "context", "geography", "institution", "too", "throughout", "postpone", "hero", "bedroom", "chest", "publish", "cease", "realistic", "qualify", "wife", "page", "point", "die", "elderly", "mind", "lab (=laboratory)", "still", "she", "life", "housework", "trust", "talk", "hang", "storm", "market", "profit", "fit", "firm", "realise", "death", "indeed", "crew", "log", "expectation", "my", "reference", "select", "alcohol", "bowling", "need", "would", "analyse", "precisely", "house", "premier", "identical", "infer", "evening", "factory", "cook", "trunk", "relax", "hurry", "sport", "expansion"];</script><script src="../app.js"></script></body></html>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>List 46 - 高考词汇朗读</title><link rel="stylesheet" href="../style.css"></head><body><div class="wrap">
+<a class="toplink noprint" href="../index.html">← 返回首页</a>
+<div class="card"><h1>List 46</h1><p class="muted">61 个单词。点击单词即可播放英文发音。</p>
+<div class="controls noprint">
+<button onclick="playSeq()">顺序播放</button><button class="secondary" onclick="playRandom()">随机播放</button><button class="stop" onclick="stopPlay()">停止</button>
+<label>语速 <select id="rate"><option value="0.75">慢速</option><option value="0.9" selected>正常偏慢</option><option value="1">正常</option></select></label>
+<label>间隔 <input id="gap" type="number" min="0.5" max="6" step="0.5" value="1.2" style="width:70px"> 秒</label>
+</div></div>
+<div id="wordgrid" class="wordgrid"></div>
+</div><script>
+const words = ["bone", "context", "geography", "institution", "too", "throughout", "postpone", "hero", "bedroom", "chest", "publish", "cease", "realistic", "qualify", "wife", "page", "point", "die", "elderly", "mind", "lab (=laboratory)", "still", "she", "life", "housework", "trust", "talk", "hang", "hung)", "storm", "market", "profit", "fit", "firm", "realise", "death", "indeed", "crew", "log", "expectation", "my", "reference", "select", "alcohol", "bowling", "need", "would", "analyse", "precisely", "house", "premier", "identical", "infer", "evening", "factory", "cook", "trunk", "relax", "hurry", "sport", "expansion"];
+let playing=false, timer=null, activeIndex=-1;
+const grid=document.getElementById('wordgrid');
+words.forEach((w,i)=>{const d=document.createElement('div');d.className='word';d.textContent=w;d.onclick=()=>speak(w,i);grid.appendChild(d);});
+function mark(i){document.querySelectorAll('.word').forEach((e,j)=>e.classList.toggle('active',j===i));}
+function speak(w,i){window.speechSynthesis.cancel(); mark(i); const u=new SpeechSynthesisUtterance(w); u.lang='en-US'; u.rate=parseFloat(document.getElementById('rate').value||'0.9'); window.speechSynthesis.speak(u);}
+function stopPlay(){playing=false; clearTimeout(timer); window.speechSynthesis.cancel(); mark(-1);}
+function playList(arr,pos=0){ if(!playing||pos>=arr.length){playing=false;return;} const i=arr[pos]; speak(words[i],i); const gap=parseFloat(document.getElementById('gap').value||'1.2')*1000; timer=setTimeout(()=>playList(arr,pos+1), Math.max(900,gap+900)); }
+function playSeq(){stopPlay(); playing=true; playList(words.map((_,i)=>i));}
+function playRandom(){stopPlay(); playing=true; const arr=words.map((_,i)=>i).sort(()=>Math.random()-0.5); playList(arr);}
+</script></body></html>
